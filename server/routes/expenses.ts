@@ -37,6 +37,11 @@ expenseRouter.post('/', zValidator('json', createPostSchema), async (c) => {
 	return c.json({ msg: fakeExpanses });
 });
 
+expenseRouter.get('/totalSpent', (c) => {
+	const total = fakeExpanses.reduce((acc, cur) => acc + cur.amount, 0);
+	return c.json({ total });
+});
+
 expenseRouter.get('/:id{[0-9]+}', (c) => {
 	const id = Number.parseInt(c.req.param('id'));
 	const expense = fakeExpanses.find((expense) => expense.id === id);

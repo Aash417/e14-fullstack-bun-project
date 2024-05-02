@@ -8,7 +8,7 @@ import { expenseRouter } from './routes/expenses';
 const app = new Hono();
 
 app.use('*', logger())
-app.get('/text', (c) => c.json({ msg: 'doing it ' }));
-app.route('/api',expenseRouter )
+app.get('/test', (c) => c.json({ msg: 'doing it ' }));
+app.route('/api/expense', expenseRouter);
 
 export default app;

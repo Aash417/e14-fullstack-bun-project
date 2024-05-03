@@ -34,7 +34,8 @@ export const expenseRouter = new Hono()
 		fakeExpanses.push({ ...expense, id: fakeExpanses.length + 1 });
 		return c.json({ msg: fakeExpanses });
 	})
-	.get('/totalSpent', (c) => {
+	.get('/totalSpent', async (c) => {
+		// await new Promise((r) => setTimeout(r, 2000));
 		const total = fakeExpanses.reduce((acc, cur) => acc + cur.amount, 0);
 		return c.json({ total });
 	})

@@ -13,11 +13,11 @@ function NavBar() {
 			<Link to='/about' className='[&.active]:font-bold'>
 				About
 			</Link>
-			<Link to='/create-expense' className='[&.active]:font-bold'>
-				Create
-			</Link>
 			<Link to='/expenses' className='[&.active]:font-bold'>
 				Expenses
+			</Link>
+			<Link to='/create-expense' className='[&.active]:font-bold'>
+				Create
 			</Link>
 		</div>
 	);

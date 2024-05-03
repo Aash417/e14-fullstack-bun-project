@@ -6,9 +6,11 @@ import { expenseRouter } from './routes/expenses';
 const app = new Hono();
 
 app.use('*', logger());
-app.route('/api/expense', expenseRouter);
+
+const apiRoute = app.basePath('/api').route('/expense', expenseRouter);
 
 app.get('*', serveStatic({ root: '../client/dist' }));
 app.get('*', serveStatic({ path: '../client/dist/index.html' }));
 
 export default app;
+export type ApiRoute = typeof apiRoute;

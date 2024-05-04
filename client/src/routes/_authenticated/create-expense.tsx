@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api } from '@/utils/api';
@@ -28,6 +30,7 @@ function CreateExpense() {
 		defaultValues: {
 			title: '',
 			amount: '0',
+			date: new Date().toISOString(),
 		},
 		onSubmit: async ({ value }) => {
 			// Do something with form data
@@ -40,7 +43,6 @@ function CreateExpense() {
 
 	return (
 		<div className='p-2'>
-			<h2>Create Expense</h2>
 			<div className='max-w-xl m-auto'>
 				<form
 					onSubmit={(e) => {
@@ -84,6 +86,22 @@ function CreateExpense() {
 								/>
 								<FieldInfo field={field} />
 							</>
+						)}
+					/>
+					<form.Field
+						name='date'
+						children={(field) => (
+							<div className='self-center'>
+								<Calendar
+									mode='single'
+									selected={new Date(field.state.value)}
+									onSelect={(date) =>
+										field.handleChange((date ?? new Date()).toISOString())
+									}
+									className='border rounded-md shadow'
+								/>
+								<FieldInfo field={field} />
+							</div>
 						)}
 					/>
 					<form.Subscribe

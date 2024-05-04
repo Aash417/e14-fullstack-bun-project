@@ -1,11 +1,14 @@
+import { Button } from '@/components/ui/button';
 import { userQueryOptions } from '@/utils/api';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 
 const Login = () => {
 	return (
-		<div className=''>
-			you have to login
-			<a href='/api/login'>login...</a>
+		<div className='flex flex-col max-w-xl gap-6 m-auto'>
+			<h3>You are not logged in</h3>
+			<Button asChild className='w-20'>
+				<a href='/api/login'>login</a>
+			</Button>
 		</div>
 	);
 };

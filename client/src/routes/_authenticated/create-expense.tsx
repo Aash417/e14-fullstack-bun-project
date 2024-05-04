@@ -6,6 +6,8 @@ import { api } from '@/utils/api';
 import type { FieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { zodValidator } from '@tanstack/zod-form-adapter';
+import { createExpenseSchema } from '../../../../server/commonTypes';
 
 export const Route = createFileRoute('/_authenticated/create-expense')({
 	component: CreateExpense,
@@ -49,6 +51,10 @@ function CreateExpense() {
 				>
 					<form.Field
 						name='title'
+						validatorAdapter={zodValidator}
+						validators={{
+							onChange: createExpenseSchema.shape.title,
+						}}
 						children={(field) => (
 							<>
 								<Label htmlFor={field.name}>Title</Label>

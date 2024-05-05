@@ -1,15 +1,9 @@
 # fullstack-bun-project
 
-To install dependencies:
+To run: in root folder & in client folder:
 
 ```bash
-bun install
+bun dev
 ```
 
-To run:
 
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.1.6. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

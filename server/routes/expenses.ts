@@ -21,14 +21,17 @@ export const expenseRouter = new Hono()
 	.post('/', getUser, zValidator('json', createExpenseSchema), async (c) => {
 		const expense = await c.req.valid('json');
 		const user = c.var.user;
-		const validateExpenses = insertExpenseSchema.parse({ ...expense, userId: user.id });
+		const validateExpense = insertExpenseSchema.parse({
+			...expense,
+			userId: user.id,
+		});
 
 		const result = await db
 			.insert(expenseTable)
-			.values(validateExpenses)
+			.values(validateExpense)
 			.returning()
 			.then((res) => res[0]);
-		
+
 		c.status(201);
 		return c.json(result);
 	})

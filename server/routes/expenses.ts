@@ -23,7 +23,12 @@ export const expenseRouter = new Hono()
 		const user = c.var.user;
 		const validateExpenses = insertExpenseSchema.parse({ ...expense, userId: user.id });
 
-		const result = await db.insert(expenseTable).values(validateExpenses);
+		const result = await db
+			.insert(expenseTable)
+			.values(validateExpenses)
+			.returning()
+			.then((res) => res[0]);
+		
 		c.status(201);
 		return c.json(result);
 	})

@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { api } from '@/utils/api';
+import { createExpense, getTotalExpenseQueryOptions } from '@/utils/api';
 import type { FieldApi } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
+import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-form-adapter';
+import { toast } from 'sonner';
 import { createExpenseSchema } from '../../../../server/commonTypes';
 
 export const Route = createFileRoute('/_authenticated/create-expense')({
@@ -25,6 +26,7 @@ function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
 }
 
 function CreateExpense() {
+	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const form = useForm({
 		defaultValues: {
@@ -33,11 +35,32 @@ function CreateExpense() {
 			date: new Date().toISOString(),
 		},
 		onSubmit: async ({ value }) => {
-			// Do something with form data
-			const res = await api.expense.$post({ json: value });
+			const existingExpenses = await queryClient.ensureQueryData(getTotalExpenseQueryOptions);
+
 			navigate({ to: '/expenses' });
-			if (!res.ok) throw new Error('server error');
-			console.log(value);
+
+			//loading state
+			queryClient.setQueryData(['loading-create-expense'], { expense: value });
+
+			try {
+				// success state
+				const newExpense = await createExpense({ value });
+				// manually setting your data in query client
+				queryClient.setQueryData(getTotalExpenseQueryOptions.queryKey, [
+					newExpense,
+					...existingExpenses,
+				]);
+				toast('Expense created', {
+					description: `Successfully created new Expense : ${newExpense.id}`,
+				});
+			} catch (error) {
+				toast('Error', {
+					description: 'Failed to create new expense',
+				});
+				// error state
+			} finally {
+				queryClient.setQueryData(['loading-create-expense'], {});
+			}
 		},
 	});
 
